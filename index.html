@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>AI Minute Autopilot</title>
+<title>AI MINUTE AUTOPILOT</title>
 
 <style>
 * {
@@ -14,358 +13,868 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background: #080b12;
-    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #07080d;
+    color: #ffffff;
+    min-height: 100vh;
 }
 
-header {
-    padding: 18px;
-    border-bottom: 1px solid #202633;
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.app {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    min-height: 100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+    width: 250px;
+    background: #0c0e15;
+    border-right: 1px solid #202330;
+    padding: 22px 16px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 20;
 }
 
 .logo {
-    font-size: 22px;
-    font-weight: bold;
-}
-
-.logo span {
-    color: #ff4fa3;
-}
-
-.status {
-    font-size: 13px;
-    color: #55e89a;
-}
-
-.container {
-    max-width: 1100px;
-    margin: auto;
-    padding: 25px 18px 50px;
-}
-
-.hero {
-    padding: 30px 0;
-}
-
-.hero h1 {
-    font-size: 38px;
-    margin-bottom: 12px;
-}
-
-.hero h1 span {
-    color: #ff4fa3;
-}
-
-.hero p {
-    color: #9ca5b5;
-    font-size: 16px;
-    line-height: 1.6;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 18px;
-}
-
-.card {
-    background: #10151f;
-    border: 1px solid #222b3a;
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 18px;
-}
-
-.card h2 {
-    font-size: 18px;
-    margin-bottom: 15px;
-}
-
-.card p {
-    color: #8993a5;
-    font-size: 14px;
-    line-height: 1.5;
-}
-
-.autopilot {
-    border: 1px solid #ff4fa3;
-    background: linear-gradient(135deg, #16101a, #10151f);
-}
-
-.big-toggle {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-}
-
-.toggle {
-    width: 62px;
-    height: 34px;
-    border-radius: 20px;
-    background: #303746;
-    padding: 4px;
-    cursor: pointer;
-}
-
-.toggle-circle {
-    width: 26px;
-    height: 26px;
-    background: white;
-    border-radius: 50%;
-    transition: 0.2s;
-}
-
-.toggle.active {
-    background: #ff4fa3;
-}
-
-.toggle.active .toggle-circle {
-    transform: translateX(28px);
-}
-
-label {
-    display: block;
-    color: #b7bfcd;
-    font-size: 13px;
-    margin-bottom: 7px;
-}
-
-select,
-input,
-button {
-    width: 100%;
-    padding: 13px;
-    border-radius: 10px;
-    border: 1px solid #2b3444;
-    background: #0a0e15;
-    color: white;
-    font-size: 14px;
-}
-
-select,
-input {
-    margin-bottom: 15px;
-}
-
-button {
-    background: #ff4fa3;
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-button:hover {
-    opacity: 0.9;
-}
-
-.secondary {
-    background: #202735;
-    margin-top: 10px;
-}
-
-.feature {
-    display: flex;
     gap: 12px;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid #202633;
+    margin-bottom: 35px;
 }
 
-.feature:last-child {
-    border-bottom: none;
-}
-
-.icon {
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    background: #1b2230;
+.logo-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: linear-gradient(135deg,#7c3cff,#e63cff);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
+    font-size: 21px;
+    font-weight: bold;
+    box-shadow: 0 0 25px rgba(180,70,255,.3);
 }
 
-.feature strong {
-    display: block;
-    margin-bottom: 3px;
+.logo h1 {
+    font-size: 17px;
+    letter-spacing: .5px;
 }
 
-.feature small {
-    color: #7f899a;
+.logo span {
+    color: #a7a9b7;
+    font-size: 11px;
 }
 
-#message {
-    display: none;
-    margin-top: 15px;
-    padding: 12px;
-    border-radius: 10px;
-    background: #13251c;
-    color: #5ff0a0;
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
 }
 
-footer {
-    text-align: center;
-    color: #687285;
-    padding: 30px;
+.nav button {
+    border: 0;
+    background: transparent;
+    color: #999cab;
+    text-align: left;
+    padding: 13px 14px;
+    border-radius: 11px;
+    transition: .2s;
+}
+
+.nav button:hover,
+.nav button.active {
+    background: #191421;
+    color: white;
+}
+
+.nav-icon {
+    display: inline-block;
+    width: 25px;
+}
+
+/* MAIN */
+
+.main {
+    margin-left: 250px;
+    width: calc(100% - 250px);
+    padding: 28px;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.topbar h2 {
+    font-size: 25px;
+}
+
+.topbar p {
+    color: #777b8b;
+    margin-top: 5px;
     font-size: 13px;
+}
+
+.status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 13px;
+    background: #10131c;
+    border: 1px solid #252938;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #aaa;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: #666;
+    border-radius: 50%;
+}
+
+.status-dot.on {
+    background: #22c55e;
+    box-shadow: 0 0 12px #22c55e;
+}
+
+/* CARDS */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.card {
+    background: #0d1018;
+    border: 1px solid #202431;
+    border-radius: 15px;
+    padding: 19px;
+}
+
+.stat-title {
+    color: #777b8b;
+    font-size: 12px;
+}
+
+.stat-value {
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.stat-sub {
+    color: #666b7b;
+    font-size: 11px;
+    margin-top: 5px;
+}
+
+/* AUTOPILOT */
+
+.autopilot {
+    background:
+        radial-gradient(circle at 90% 20%,rgba(132,53,255,.2),transparent 30%),
+        #10121b;
+    border: 1px solid #30234b;
+    border-radius: 18px;
+    padding: 25px;
+    margin-bottom: 20px;
+}
+
+.auto-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.auto-title {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.robot {
+    width: 52px;
+    height: 52px;
+    border-radius: 15px;
+    background: #24153b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+}
+
+.auto-title h3 {
+    font-size: 19px;
+}
+
+.auto-title p {
+    color: #858999;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* SWITCH */
+
+.switch {
+    position: relative;
+    width: 62px;
+    height: 34px;
+    flex-shrink: 0;
+}
+
+.switch input {
+    display: none;
+}
+
+.slider {
+    position: absolute;
+    inset: 0;
+    background: #292d39;
+    border-radius: 30px;
+    transition: .3s;
+}
+
+.slider:before {
+    content: "";
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    left: 4px;
+    top: 4px;
+    background: white;
+    border-radius: 50%;
+    transition: .3s;
+}
+
+.switch input:checked + .slider {
+    background: #7c3cff;
+}
+
+.switch input:checked + .slider:before {
+    transform: translateX(28px);
+}
+
+/* CONTROLS */
+
+.controls {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.field label {
+    display: block;
+    color: #8c90a0;
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+.field select,
+.field input,
+.field textarea {
+    width: 100%;
+    background: #090b11;
+    border: 1px solid #292d39;
+    color: white;
+    border-radius: 10px;
+    padding: 12px;
+    outline: none;
+}
+
+.field select:focus,
+.field input:focus,
+.field textarea:focus {
+    border-color: #8145ff;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* BUTTONS */
+
+.actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 22px;
+}
+
+.btn {
+    border: 0;
+    border-radius: 10px;
+    padding: 12px 17px;
+    color: white;
+    background: #1c202b;
+}
+
+.btn:hover {
+    background: #292e3b;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg,#7437ff,#bd36e8);
+}
+
+.btn-primary:hover {
+    opacity: .9;
+}
+
+.btn-green {
+    background: #13733b;
+}
+
+/* TWO COLUMN */
+
+.two-col {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 20px;
+}
+
+.card h3 {
+    margin-bottom: 18px;
+    font-size: 16px;
+}
+
+.activity {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 14px 0;
+    border-bottom: 1px solid #1c202b;
+}
+
+.activity:last-child {
+    border-bottom: 0;
+}
+
+.activity-title {
+    font-size: 13px;
+}
+
+.activity-sub {
+    color: #707585;
+    font-size: 11px;
+    margin-top: 5px;
+}
+
+.badge {
+    height: fit-content;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 10px;
+}
+
+.badge.green {
+    background: #123a26;
+    color: #42d581;
+}
+
+.badge.yellow {
+    background: #3a3213;
+    color: #e8ca55;
+}
+
+.badge.gray {
+    background: #242731;
+    color: #a5a8b5;
+}
+
+/* PROGRESS */
+
+.progress {
+    height: 7px;
+    background: #20232e;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 12px;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 68%;
+    background: linear-gradient(90deg,#763cff,#d038ed);
+    border-radius: 10px;
+}
+
+/* MODAL */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.72);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 100;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-box {
+    width: 100%;
+    max-width: 500px;
+    background: #11141d;
+    border: 1px solid #292d3b;
+    border-radius: 18px;
+    padding: 25px;
+}
+
+.modal-box h2 {
+    margin-bottom: 10px;
+}
+
+.modal-box p {
+    color: #858999;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.close {
+    float: right;
+    background: transparent;
+    border: 0;
+    color: #aaa;
+    font-size: 23px;
+}
+
+/* MOBILE */
+
+.mobile-header {
+    display: none;
+}
+
+@media(max-width:850px) {
+
+    .sidebar {
+        transform: translateX(-100%);
+        transition: .3s;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main {
+        margin-left: 0;
+        width: 100%;
+        padding: 18px;
+    }
+
+    .mobile-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .menu-btn {
+        background: #151822;
+        color: white;
+        border: 1px solid #272b37;
+        border-radius: 9px;
+        padding: 10px 13px;
+    }
+
+    .grid {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+    .two-col {
+        grid-template-columns: 1fr;
+    }
+
+    .controls {
+        grid-template-columns: 1fr;
+    }
+
+    .topbar {
+        display: none;
+    }
+}
+
+@media(max-width:480px) {
+
+    .grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stat-value {
+        font-size: 22px;
+    }
+
+    .autopilot {
+        padding: 18px;
+    }
+
+    .auto-head {
+        align-items: flex-start;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<header>
+<div class="app">
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar" id="sidebar">
+
     <div class="logo">
-        AI <span>MINUTE</span>
+        <div class="logo-icon">AI</div>
+        <div>
+            <h1>AI MINUTE</h1>
+            <span>AUTOPILOT</span>
+        </div>
+    </div>
+
+    <nav class="nav">
+
+        <button class="active" onclick="showSection('dashboard')">
+            <span class="nav-icon">⌂</span>
+            Dashboard
+        </button>
+
+        <button onclick="showSection('create')">
+            <span class="nav-icon">✦</span>
+            Create Video
+        </button>
+
+        <button onclick="showSection('shorts')">
+            <span class="nav-icon">▣</span>
+            Create Shorts
+        </button>
+
+        <button onclick="showSection('analysis')">
+            <span class="nav-icon">⌁</span>
+            Video Analysis
+        </button>
+
+        <button onclick="showSection('schedule')">
+            <span class="nav-icon">◷</span>
+            Schedule
+        </button>
+
+        <button onclick="showSection('settings')">
+            <span class="nav-icon">⚙</span>
+            Settings
+        </button>
+
+    </nav>
+
+</aside>
+
+
+<!-- MAIN -->
+
+<main class="main">
+
+<div class="mobile-header">
+
+    <button class="menu-btn" onclick="toggleMenu()">
+        ☰
+    </button>
+
+    <strong>AI MINUTE</strong>
+
+    <span>●</span>
+
+</div>
+
+
+<div class="topbar">
+
+    <div>
+        <h2>AI Autopilot</h2>
+        <p>Your automated YouTube content control center.</p>
     </div>
 
     <div class="status">
-        ● System Ready
+
+        <span class="status-dot" id="statusDot"></span>
+
+        <span id="statusText">
+            Autopilot Offline
+        </span>
+
     </div>
-</header>
 
-<div class="container">
-
-    <section class="hero">
-        <h1>
-            YouTube <span>Autopilot</span>
-        </h1>
-
-        <p>
-            AI-powered video creation, voiceover, Shorts,
-            scheduling and YouTube management from one dashboard.
-        </p>
-    </section>
+</div>
 
 
-    <!-- AUTOPILOT -->
+<!-- STATS -->
 
-    <div class="card autopilot">
+<div class="grid">
 
-        <div class="big-toggle">
+    <div class="card">
+
+        <div class="stat-title">
+            VIDEOS CREATED
+        </div>
+
+        <div class="stat-value" id="videosCreated">
+            0
+        </div>
+
+        <div class="stat-sub">
+            This month
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="stat-title">
+            SHORTS CREATED
+        </div>
+
+        <div class="stat-value" id="shortsCreated">
+            0
+        </div>
+
+        <div class="stat-sub">
+            This month
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="stat-title">
+            SCHEDULED
+        </div>
+
+        <div class="stat-value" id="scheduledCount">
+            0
+        </div>
+
+        <div class="stat-sub">
+            Upcoming uploads
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="stat-title">
+            AUTOPILOT
+        </div>
+
+        <div class="stat-value" id="autoStat">
+            OFF
+        </div>
+
+        <div class="stat-sub">
+            Automation status
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- AUTOPILOT -->
+
+<section class="autopilot">
+
+    <div class="auto-head">
+
+        <div class="auto-title">
+
+            <div class="robot">
+                🤖
+            </div>
 
             <div>
-                <h2>🚀 Autopilot Mode</h2>
+
+                <h3>
+                    Autopilot Mode
+                </h3>
 
                 <p>
-                    Automatically create and prepare videos
-                    according to your settings.
+                    Automatically create content according to your settings.
                 </p>
+
             </div>
 
-            <div
-                class="toggle"
-                id="autopilotToggle"
-                onclick="toggleAutopilot()"
+        </div>
+
+
+        <label class="switch">
+
+            <input
+                type="checkbox"
+                id="autopilot"
+                onchange="toggleAutopilot()"
             >
-                <div class="toggle-circle"></div>
-            </div>
 
-        </div>
+            <span class="slider"></span>
 
-        <div id="message">
-            Autopilot activated.
-        </div>
+        </label>
 
     </div>
 
 
-    <div class="grid">
+    <div class="controls">
 
-        <!-- VIDEO SETTINGS -->
+        <div class="field">
 
-        <div class="card">
+            <label>
+                CONTENT TYPE
+            </label>
 
-            <h2>🎬 Video Settings</h2>
+            <select id="contentType">
 
-            <label>Video Type</label>
+                <option value="long">
+                    Long Video
+                </option>
 
-            <select id="videoType">
+                <option value="short">
+                    YouTube Short
+                </option>
 
-                <option>Long Video</option>
-                <option>YouTube Short</option>
-                <option>Both</option>
+                <option value="both">
+                    Long Video + Shorts
+                </option>
 
             </select>
 
+        </div>
 
-            <label>Content Category</label>
+
+        <div class="field">
+
+            <label>
+                VIDEO CATEGORY
+            </label>
 
             <select id="category">
 
-                <option>AI & Technology</option>
-                <option>Business</option>
-                <option>Productivity</option>
-                <option>Motivation</option>
-                <option>Education</option>
-                <option>News & Trends</option>
+                <option>
+                    AI & Technology
+                </option>
 
-            </select>
+                <option>
+                    Business
+                </option>
 
+                <option>
+                    Productivity
+                </option>
 
-            <label>Video Length</label>
+                <option>
+                    Motivation
+                </option>
 
-            <select>
+                <option>
+                    Education
+                </option>
 
-                <option>1-3 minutes</option>
-                <option>5-8 minutes</option>
-                <option>8-10 minutes</option>
-                <option>10-15 minutes</option>
+                <option>
+                    Entertainment
+                </option>
+
+                <option>
+                    Custom
+                </option>
 
             </select>
 
         </div>
 
 
-        <!-- VOICE -->
+        <div class="field">
 
-        <div class="card">
-
-            <h2>🎙️ AI Voiceover</h2>
-
-            <label>Voice Model</label>
+            <label>
+                VOICE TYPE
+            </label>
 
             <select id="voice">
 
-                <option>Girl - Natural</option>
-                <option>Boy - Natural</option>
-                <option>Man - Deep</option>
-                <option>Woman - Professional</option>
+                <option value="girl">
+                    Girl Voice
+                </option>
+
+                <option value="boy">
+                    Boy Voice
+                </option>
+
+                <option value="woman">
+                    Woman Voice
+                </option>
+
+                <option value="man">
+                    Man Voice
+                </option>
 
             </select>
-
-
-            <label>Voice Language</label>
-
-            <select>
-
-                <option>English (US)</option>
-                <option>English (UK)</option>
-                <option>Hindi</option>
-                <option>Bengali</option>
-
-            </select>
-
-
-            <button onclick="testVoice()">
-                Test Voice
-            </button>
 
         </div>
 
 
-        <!-- UPLOAD -->
+        <div class="field">
 
-        <div class="card">
+            <label>
+                UPLOAD FREQUENCY
+            </label>
 
-            <h2>📤 YouTube Upload</h2>
+            <select id="frequency">
 
-            <label>Upload Time</label>
+                <option value="daily">
+                    Every Day
+                </option>
+
+                <option value="twice">
+                    Twice a Day
+                </option>
+
+                <option value="weekly">
+                    Every Week
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                UPLOAD TIME
+            </label>
 
             <input
                 type="time"
@@ -373,183 +882,416 @@ footer {
                 value="18:00"
             >
 
-
-            <label>Upload Frequency</label>
-
-            <select>
-
-                <option>Every Day</option>
-                <option>Every 2 Days</option>
-                <option>3 Times a Week</option>
-                <option>Once a Week</option>
-
-            </select>
-
-
-            <label>Visibility</label>
-
-            <select>
-
-                <option>Public</option>
-                <option>Unlisted</option>
-                <option>Private</option>
-
-            </select>
-
         </div>
 
 
-        <!-- AI ANALYSIS -->
+        <div class="field">
 
-        <div class="card">
+            <label>
+                TARGET AUDIENCE
+            </label>
 
-            <h2>🧠 Video Analyzer</h2>
+            <select id="audience">
 
-            <p>
-                AI will analyze your video for title,
-                description, thumbnail ideas, keywords,
-                retention problems and Shorts opportunities.
-            </p>
+                <option>
+                    United States
+                </option>
 
-            <br>
+                <option>
+                    India
+                </option>
 
-            <button onclick="analyzeVideo()">
-                Analyze Video
-            </button>
+                <option>
+                    Global
+                </option>
+
+            </select>
 
         </div>
 
     </div>
 
 
-    <!-- FEATURES -->
+    <div class="actions">
 
-    <div class="card">
-
-        <h2>⚡ Autopilot Features</h2>
-
-        <div class="feature">
-
-            <div class="icon">🧠</div>
-
-            <div>
-                <strong>AI Topic Research</strong>
-                <small>
-                    Find potential topics automatically.
-                </small>
-            </div>
-
-        </div>
-
-
-        <div class="feature">
-
-            <div class="icon">✍️</div>
-
-            <div>
-                <strong>AI Script Creation</strong>
-                <small>
-                    Generate complete video scripts.
-                </small>
-            </div>
-
-        </div>
-
-
-        <div class="feature">
-
-            <div class="icon">🎙️</div>
-
-            <div>
-                <strong>AI Voiceover</strong>
-                <small>
-                    Choose girl, boy, man or woman voices.
-                </small>
-            </div>
-
-        </div>
-
-
-        <div class="feature">
-
-            <div class="icon">🎬</div>
-
-            <div>
-                <strong>Automatic Video Creation</strong>
-                <small>
-                    Turn scripts into videos automatically.
-                </small>
-            </div>
-
-        </div>
-
-
-        <div class="feature">
-
-            <div class="icon">📱</div>
-
-            <div>
-                <strong>Shorts Generator</strong>
-                <small>
-                    Automatically create Shorts from long videos.
-                </small>
-            </div>
-
-        </div>
-
-
-        <div class="feature">
-
-            <div class="icon">📊</div>
-
-            <div>
-                <strong>Video Analysis</strong>
-                <small>
-                    Analyze titles, descriptions and content.
-                </small>
-            </div>
-
-        </div>
-
-
-        <div class="feature">
-
-            <div class="icon">⏰</div>
-
-            <div>
-                <strong>Scheduled Publishing</strong>
-                <small>
-                    Choose when your videos should be uploaded.
-                </small>
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- SAVE -->
-
-    <div class="card">
-
-        <h2>💾 Save Autopilot Settings</h2>
-
-        <p>
-            Your selected settings will be used by the
-            Autopilot system.
-        </p>
-
-        <br>
-
-        <button onclick="saveSettings()">
-            Save Settings
+        <button
+            class="btn btn-primary"
+            onclick="createVideo()"
+        >
+            ✦ Create Video
         </button>
 
         <button
-            class="secondary"
-            onclick="showSettings()"
+            class="btn"
+            onclick="createShort()"
         >
-            View Current Settings
+            ▣ Create Short
+        </button>
+
+        <button
+            class="btn"
+            onclick="scheduleUpload()"
+        >
+            ◷ Schedule Upload
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- LOWER CONTENT -->
+
+<div class="two-col">
+
+
+<section class="card">
+
+    <h3>
+        Recent Activity
+    </h3>
+
+    <div id="activityList">
+
+        <div class="activity">
+
+            <div>
+
+                <div class="activity-title">
+                    Welcome to AI MINUTE
+                </div>
+
+                <div class="activity-sub">
+                    Configure Autopilot to begin.
+                </div>
+
+            </div>
+
+            <span class="badge gray">
+                READY
+            </span>
+
+        </div>
+
+
+        <div class="activity">
+
+            <div>
+
+                <div class="activity-title">
+                    Video Engine
+                </div>
+
+                <div class="activity-sub">
+                    Waiting for backend connection.
+                </div>
+
+            </div>
+
+            <span class="badge yellow">
+                WAITING
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="card">
+
+    <h3>
+        Autopilot Progress
+    </h3>
+
+    <p
+        id="progressText"
+        style="color:#858999;font-size:12px;"
+    >
+        Autopilot is currently disabled.
+    </p>
+
+    <div class="progress">
+
+        <div
+            class="progress-bar"
+            id="progressBar"
+            style="width:0%"
+        ></div>
+
+    </div>
+
+    <div style="margin-top:22px;color:#777b8b;font-size:12px;">
+
+        Next scheduled action
+
+    </div>
+
+    <div
+        id="nextAction"
+        style="margin-top:7px;font-size:14px;"
+    >
+        Nothing scheduled
+    </div>
+
+</section>
+
+</div>
+
+
+<!-- CREATE SECTION -->
+
+<section
+    id="create"
+    class="card"
+    style="display:none;margin-top:20px;"
+>
+
+    <h3>Create AI Video</h3>
+
+    <div class="field">
+
+        <label>
+            VIDEO TOPIC
+        </label>
+
+        <textarea
+            id="topic"
+            placeholder="Example: 5 AI tools that can save small businesses hours every week"
+        ></textarea>
+
+    </div>
+
+    <div class="actions">
+
+        <button
+            class="btn btn-primary"
+            onclick="createVideo()"
+        >
+            Generate Video
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- SHORTS -->
+
+<section
+    id="shorts"
+    class="card"
+    style="display:none;margin-top:20px;"
+>
+
+    <h3>Create YouTube Short</h3>
+
+    <div class="field">
+
+        <label>
+            SHORT TOPIC
+        </label>
+
+        <textarea
+            id="shortTopic"
+            placeholder="Enter your Shorts topic..."
+        ></textarea>
+
+    </div>
+
+    <div class="actions">
+
+        <button
+            class="btn btn-primary"
+            onclick="createShort()"
+        >
+            Generate Short
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- ANALYSIS -->
+
+<section
+    id="analysis"
+    class="card"
+    style="display:none;margin-top:20px;"
+>
+
+    <h3>Video Analysis</h3>
+
+    <p
+        style="color:#858999;font-size:13px;line-height:1.6;"
+    >
+        Upload a video later when the backend is connected.
+        The AI engine will analyze title, hook, pacing,
+        retention opportunities and content quality.
+    </p>
+
+    <div class="actions">
+
+        <button
+            class="btn btn-primary"
+            onclick="openMessage('Video analysis engine will be connected in the backend version.')"
+        >
+            Analyze Video
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- SCHEDULE -->
+
+<section
+    id="schedule"
+    class="card"
+    style="display:none;margin-top:20px;"
+>
+
+    <h3>Upload Schedule</h3>
+
+    <div class="controls">
+
+        <div class="field">
+
+            <label>
+                DATE
+            </label>
+
+            <input
+                type="date"
+                id="scheduleDate"
+            >
+
+        </div>
+
+        <div class="field">
+
+            <label>
+                TIME
+            </label>
+
+            <input
+                type="time"
+                id="scheduleTime"
+                value="18:00"
+            >
+
+        </div>
+
+    </div>
+
+    <div class="actions">
+
+        <button
+            class="btn btn-primary"
+            onclick="scheduleUpload()"
+        >
+            Save Schedule
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- SETTINGS -->
+
+<section
+    id="settings"
+    class="card"
+    style="display:none;margin-top:20px;"
+>
+
+    <h3>Settings</h3>
+
+    <div class="field">
+
+        <label>
+            CHANNEL TYPE
+        </label>
+
+        <select>
+
+            <option>
+                YouTube
+            </option>
+
+            <option>
+                YouTube + Shorts
+            </option>
+
+        </select>
+
+    </div>
+
+    <div class="field" style="margin-top:15px;">
+
+        <label>
+            BRAND NAME
+        </label>
+
+        <input
+            type="text"
+            value="AI MINUTE"
+        >
+
+    </div>
+
+    <div class="actions">
+
+        <button
+            class="btn btn-green"
+            onclick="openMessage('Settings saved locally. Backend integration will be added next.')"
+        >
+            Save Settings
+        </button>
+
+    </div>
+
+</section>
+
+
+</main>
+
+</div>
+
+
+<!-- MODAL -->
+
+<div
+    class="modal"
+    id="modal"
+>
+
+    <div class="modal-box">
+
+        <button
+            class="close"
+            onclick="closeMessage()"
+        >
+            ×
+        </button>
+
+        <h2 id="modalTitle">
+            AI MINUTE
+        </h2>
+
+        <p id="modalText">
+            Ready.
+        </p>
+
+        <button
+            class="btn btn-primary"
+            onclick="closeMessage()"
+        >
+            Continue
         </button>
 
     </div>
@@ -557,135 +1299,397 @@ footer {
 </div>
 
 
-<footer>
-    AI MINUTE AUTOPILOT • Prototype
-</footer>
-
-
 <script>
 
-let autopilot = false;
+/* MENU */
 
+function toggleMenu() {
+
+    document
+        .getElementById("sidebar")
+        .classList
+        .toggle("open");
+
+}
+
+
+/* AUTOPILOT */
 
 function toggleAutopilot() {
 
-    const toggle =
-        document.getElementById("autopilotToggle");
+    const enabled =
+        document
+        .getElementById("autopilot")
+        .checked;
 
-    const message =
-        document.getElementById("message");
+    const dot =
+        document
+        .getElementById("statusDot");
 
-    autopilot = !autopilot;
+    const status =
+        document
+        .getElementById("statusText");
 
-    if (autopilot) {
+    const stat =
+        document
+        .getElementById("autoStat");
 
-        toggle.classList.add("active");
+    const progress =
+        document
+        .getElementById("progressBar");
 
-        message.style.display = "block";
+    const progressText =
+        document
+        .getElementById("progressText");
 
-        message.innerText =
-            "🚀 Autopilot activated. Your settings are ready.";
+    if (enabled) {
+
+        dot.classList.add("on");
+
+        status.textContent =
+            "Autopilot Online";
+
+        stat.textContent =
+            "ON";
+
+        progress.style.width =
+            "25%";
+
+        progressText.textContent =
+            "Autopilot is active and waiting for its next task.";
+
+        addActivity(
+            "Autopilot activated",
+            "Automation system is ready.",
+            "ACTIVE",
+            "green"
+        );
 
     } else {
 
-        toggle.classList.remove("active");
+        dot.classList.remove("on");
 
-        message.style.display = "block";
+        status.textContent =
+            "Autopilot Offline";
 
-        message.innerText =
-            "Autopilot paused.";
+        stat.textContent =
+            "OFF";
 
-    }
-}
+        progress.style.width =
+            "0%";
 
+        progressText.textContent =
+            "Autopilot is currently disabled.";
 
-function saveSettings() {
-
-    const settings = {
-
-        autopilot:
-            autopilot,
-
-        videoType:
-            document.getElementById("videoType").value,
-
-        category:
-            document.getElementById("category").value,
-
-        voice:
-            document.getElementById("voice").value,
-
-        uploadTime:
-            document.getElementById("uploadTime").value
-
-    };
-
-    localStorage.setItem(
-        "aiMinuteSettings",
-        JSON.stringify(settings)
-    );
-
-    const message =
-        document.getElementById("message");
-
-    message.style.display = "block";
-
-    message.innerText =
-        "✅ Settings saved on this device.";
-
-}
-
-
-function showSettings() {
-
-    const saved =
-        localStorage.getItem("aiMinuteSettings");
-
-    if (!saved) {
-
-        alert(
-            "No settings saved yet."
+        addActivity(
+            "Autopilot disabled",
+            "Automation has been paused.",
+            "OFF",
+            "gray"
         );
 
-        return;
     }
 
-    const settings =
-        JSON.parse(saved);
-
-    alert(
-        "Autopilot: " + settings.autopilot +
-        "\nVideo: " + settings.videoType +
-        "\nCategory: " + settings.category +
-        "\nVoice: " + settings.voice +
-        "\nUpload time: " + settings.uploadTime
-    );
-
 }
 
 
-function analyzeVideo() {
+/* CREATE VIDEO */
 
-    alert(
-        "Video Analyzer UI is ready.\n\n" +
-        "Next we will connect the AI backend so it can " +
-        "actually analyze uploaded videos."
-    );
+function createVideo() {
 
-}
+    const topic =
+        document
+        .getElementById("topic")
+        ?.value
+        .trim();
 
-
-function testVoice() {
+    const category =
+        document
+        .getElementById("category")
+        .value;
 
     const voice =
-        document.getElementById("voice").value;
+        document
+        .getElementById("voice")
+        .value;
 
-    alert(
-        "Selected voice: " + voice +
-        "\n\nThe real AI voice engine will be connected in the backend."
+    const type =
+        document
+        .getElementById("contentType")
+        .value;
+
+    const finalTopic =
+        topic ||
+        category + " video";
+
+    document
+        .getElementById("videosCreated")
+        .textContent =
+        Number(
+            document
+            .getElementById("videosCreated")
+            .textContent
+        ) + 1;
+
+    addActivity(
+        "Video generation requested",
+        finalTopic + " • " + voice + " voice • " + type,
+        "QUEUED",
+        "yellow"
+    );
+
+    openMessage(
+        "Video request created.\n\nTopic: " +
+        finalTopic +
+        "\nVoice: " +
+        voice +
+        "\nType: " +
+        type +
+        "\n\nThe real AI video engine will be connected in the backend stage."
     );
 
 }
+
+
+/* CREATE SHORT */
+
+function createShort() {
+
+    const topic =
+        document
+        .getElementById("shortTopic")
+        ?.value
+        .trim();
+
+    const finalTopic =
+        topic ||
+        "AI generated YouTube Short";
+
+    document
+        .getElementById("shortsCreated")
+        .textContent =
+        Number(
+            document
+            .getElementById("shortsCreated")
+            .textContent
+        ) + 1;
+
+    addActivity(
+        "Short creation requested",
+        finalTopic,
+        "QUEUED",
+        "yellow"
+    );
+
+    openMessage(
+        "Short creation request added.\n\n" +
+        "Topic: " +
+        finalTopic +
+        "\n\nThe Shorts generation engine will be connected in the backend stage."
+    );
+
+}
+
+
+/* SCHEDULE */
+
+function scheduleUpload() {
+
+    const time =
+        document
+        .getElementById("uploadTime")
+        .value;
+
+    document
+        .getElementById("scheduledCount")
+        .textContent =
+        Number(
+            document
+            .getElementById("scheduledCount")
+            .textContent
+        ) + 1;
+
+    document
+        .getElementById("nextAction")
+        .textContent =
+        "Next upload at " + time;
+
+    addActivity(
+        "Upload scheduled",
+        "Automatic upload at " + time,
+        "SCHEDULED",
+        "green"
+    );
+
+    openMessage(
+        "Upload schedule saved.\n\n" +
+        "Time: " +
+        time +
+        "\n\nYouTube automatic upload will be connected through the backend."
+    );
+
+}
+
+
+/* ACTIVITY */
+
+function addActivity(
+    title,
+    subtitle,
+    badge,
+    color
+) {
+
+    const list =
+        document
+        .getElementById("activityList");
+
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "activity";
+
+    item.innerHTML = `
+
+        <div>
+
+            <div class="activity-title">
+                ${escapeHTML(title)}
+            </div>
+
+            <div class="activity-sub">
+                ${escapeHTML(subtitle)}
+            </div>
+
+        </div>
+
+        <span class="badge ${color}">
+            ${escapeHTML(badge)}
+        </span>
+
+    `;
+
+    list.prepend(item);
+
+}
+
+
+/* NAVIGATION */
+
+function showSection(section) {
+
+    const sections = [
+        "create",
+        "shorts",
+        "analysis",
+        "schedule",
+        "settings"
+    ];
+
+    sections.forEach(function(id) {
+
+        const element =
+            document.getElementById(id);
+
+        if (element) {
+
+            element.style.display =
+                id === section
+                ? "block"
+                : "none";
+
+        }
+
+    });
+
+    if (section === "dashboard") {
+
+        sections.forEach(function(id) {
+
+            document
+            .getElementById(id)
+            .style.display = "none";
+
+        });
+
+    }
+
+    document
+        .querySelectorAll(".nav button")
+        .forEach(function(button) {
+
+            button.classList.remove("active");
+
+        });
+
+    const sidebar =
+        document.getElementById("sidebar");
+
+    if (window.innerWidth <= 850) {
+
+        sidebar.classList.remove("open");
+
+    }
+
+}
+
+
+/* MESSAGE */
+
+function openMessage(text) {
+
+    document
+        .getElementById("modalText")
+        .textContent = text;
+
+    document
+        .getElementById("modal")
+        .classList
+        .add("show");
+
+}
+
+function closeMessage() {
+
+    document
+        .getElementById("modal")
+        .classList
+        .remove("show");
+
+}
+
+
+/* SECURITY */
+
+function escapeHTML(text) {
+
+    return String(text)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* INITIAL SETTINGS */
+
+document
+    .getElementById("uploadTime")
+    .addEventListener(
+        "change",
+        function() {
+
+            document
+                .getElementById("nextAction")
+                .textContent =
+                "Next upload at " +
+                this.value;
+
+        }
+    );
 
 </script>
 
