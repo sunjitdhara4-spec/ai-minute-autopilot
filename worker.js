@@ -2,6 +2,7 @@ function json(data, status = 200) {
   return Response.json(data, {
     status,
     headers: {
+      "Content-Type": "application/json",
       "Cache-Control": "no-store"
     }
   });
@@ -47,19 +48,51 @@ export default {
     // =========================================
 
     if (url.pathname === "/api/health") {
-
       return json({
         success: true,
         service: "AI MINUTE AUTOPILOT",
         status: "online",
-        version: "4.0.0"
+        version: "5.0.0"
       });
-
     }
 
 
     // =========================================
-    // AUTOPILOT CONFIGURATION
+    // CONFIG
+    // =========================================
+
+    if (url.pathname === "/api/config") {
+      return json({
+        success: true,
+
+        features: {
+          autopilot: true,
+          videoCreation: true,
+          shorts: true,
+          voiceOver: true,
+          videoAnalysis: true,
+          scheduling: true,
+          youtubeUpload: true
+        },
+
+        voices: [
+          "girl",
+          "boy",
+          "man",
+          "woman"
+        ],
+
+        videoTypes: [
+          "long",
+          "short",
+          "both"
+        ]
+      });
+    }
+
+
+    // =========================================
+    // AUTOPILOT SETTINGS
     // =========================================
 
     if (
@@ -69,7 +102,8 @@ export default {
 
       try {
 
-        const settings = await request.json();
+        const settings =
+          await request.json();
 
         return json({
           success: true,
@@ -79,28 +113,7 @@ export default {
               ? "Autopilot activated."
               : "Autopilot disabled.",
 
-          settings: {
-            autopilot:
-              Boolean(settings.autopilot),
-
-            videoType:
-              settings.videoType || "both",
-
-            category:
-              settings.category || "AI & Technology",
-
-            voice:
-              settings.voice || "woman",
-
-            frequency:
-              settings.frequency || "daily",
-
-            uploadTime:
-              settings.uploadTime || "18:00",
-
-            audience:
-              settings.audience || "United States"
-          }
+          settings
         });
 
       } catch (error) {
@@ -111,7 +124,6 @@ export default {
         }, 400);
 
       }
-
     }
 
 
@@ -120,7 +132,11 @@ export default {
     // =========================================
 
     if (
-      url.pathname === "/api/jobs" &&
+      (
+        url.pathname === "/api/jobs" ||
+        url.pathname === "/api/create-job" ||
+        url.pathname === "/api/production-job"
+      ) &&
       request.method === "POST"
     ) {
 
@@ -136,7 +152,7 @@ export default {
           success: true,
 
           message:
-            "Autopilot job started.",
+            "Production job created.",
 
           job
         });
@@ -149,16 +165,18 @@ export default {
         }, 400);
 
       }
-
     }
 
 
     // =========================================
-    // TEST AUTOPILOT
+    // TEST JOB
     // =========================================
 
     if (
-      url.pathname === "/api/autopilot/test" &&
+      (
+        url.pathname === "/api/autopilot/test" ||
+        url.pathname === "/api/test-job"
+      ) &&
       request.method === "POST"
     ) {
 
@@ -174,18 +192,14 @@ export default {
 
       return json({
         success: true,
-
-        message:
-          "Autopilot test started.",
-
+        message: "Autopilot test started.",
         job
       });
-
     }
 
 
     // =========================================
-    // VOICEOVER REQUEST
+    // VOICEOVER
     // =========================================
 
     if (
@@ -199,15 +213,12 @@ export default {
           await request.json();
 
         const text =
-          String(
-            body.text || ""
-          ).trim();
+          String(body.text || "").trim();
 
         const voice =
           String(
             body.voice || "woman"
-          ).trim().toLowerCase();
-
+          ).toLowerCase();
 
         if (!text) {
 
@@ -218,7 +229,6 @@ export default {
 
         }
 
-
         const allowedVoices = [
           "girl",
           "boy",
@@ -226,46 +236,27 @@ export default {
           "woman"
         ];
 
-
-        if (
-          !allowedVoices.includes(voice)
-        ) {
+        if (!allowedVoices.includes(voice)) {
 
           return json({
             success: false,
-
             error:
-              "Invalid voice. Choose girl, boy, man or woman."
+              "Invalid voice."
           }, 400);
 
         }
 
-
         return json({
-
           success: true,
 
           status: "queued",
 
           voiceJob: {
-
-            id:
-              "voice_" +
-              Date.now(),
-
-            voice: voice,
-
-            textLength:
-              text.length,
-
-            status:
-              "waiting_for_voice_provider"
-
-          },
-
-          message:
-            "Voice-over request accepted."
-
+            id: "voice_" + Date.now(),
+            voice,
+            textLength: text.length,
+            status: "waiting_for_voice_provider"
+          }
         });
 
       } catch (error) {
@@ -276,12 +267,11 @@ export default {
         }, 400);
 
       }
-
     }
 
 
     // =========================================
-    // VIDEO CREATION REQUEST
+    // VIDEO CREATION
     // =========================================
 
     if (
@@ -295,14 +285,7 @@ export default {
           await request.json();
 
         const topic =
-          String(
-            body.topic || ""
-          ).trim();
-
-        const videoType =
-          String(
-            body.videoType || "long"
-          );
+          String(body.topic || "").trim();
 
         if (!topic) {
 
@@ -313,31 +296,17 @@ export default {
 
         }
 
-
         return json({
-
           success: true,
 
           status: "queued",
 
           videoJob: {
-
-            id:
-              "video_" +
-              Date.now(),
-
-            topic: topic,
-
-            type: videoType,
-
-            status:
-              "waiting_for_video_provider"
-
-          },
-
-          message:
-            "Video creation request accepted."
-
+            id: "video_" + Date.now(),
+            topic,
+            type: body.videoType || "long",
+            status: "waiting_for_video_provider"
+          }
         });
 
       } catch (error) {
@@ -348,12 +317,11 @@ export default {
         }, 400);
 
       }
-
     }
 
 
     // =========================================
-    // SHORT CREATION REQUEST
+    // SHORT CREATION
     // =========================================
 
     if (
@@ -366,44 +334,16 @@ export default {
         const body =
           await request.json();
 
-        const source =
-          String(
-            body.source || ""
-          ).trim();
-
-
-        if (!source) {
-
-          return json({
-            success: false,
-            error: "Source video is required."
-          }, 400);
-
-        }
-
-
         return json({
-
           success: true,
 
           status: "queued",
 
           shortJob: {
-
-            id:
-              "short_" +
-              Date.now(),
-
-            source: source,
-
-            status:
-              "waiting_for_video_provider"
-
-          },
-
-          message:
-            "Short creation request accepted."
-
+            id: "short_" + Date.now(),
+            source: body.source || "",
+            status: "waiting_for_video_provider"
+          }
         });
 
       } catch (error) {
@@ -414,7 +354,6 @@ export default {
         }, 400);
 
       }
-
     }
 
 
@@ -427,58 +366,20 @@ export default {
       request.method === "POST"
     ) {
 
-      try {
+      return json({
+        success: true,
 
-        const body =
-          await request.json();
-
-        const video =
-          String(
-            body.video || ""
-          ).trim();
-
-
-        if (!video) {
-
-          return json({
-            success: false,
-            error: "Video is required."
-          }, 400);
-
+        analysis: {
+          id: "analysis_" + Date.now(),
+          status: "queued",
+          message: "Video analysis request accepted."
         }
-
-
-        return json({
-
-          success: true,
-
-          analysis: {
-
-            status: "queued",
-
-            video: video,
-
-            message:
-              "Video analysis request accepted."
-
-          }
-
-        });
-
-      } catch (error) {
-
-        return json({
-          success: false,
-          error: error.message
-        }, 400);
-
-      }
-
+      });
     }
 
 
     // =========================================
-    // YOUTUBE UPLOAD REQUEST
+    // YOUTUBE UPLOAD
     // =========================================
 
     if (
@@ -486,58 +387,17 @@ export default {
       request.method === "POST"
     ) {
 
-      try {
+      return json({
+        success: true,
 
-        const body =
-          await request.json();
+        upload: {
+          id: "upload_" + Date.now(),
+          status: "waiting_for_youtube_oauth"
+        },
 
-        const video =
-          String(
-            body.video || ""
-          ).trim();
-
-
-        if (!video) {
-
-          return json({
-            success: false,
-            error: "Video is required."
-          }, 400);
-
-        }
-
-
-        return json({
-
-          success: true,
-
-          upload: {
-
-            id:
-              "upload_" +
-              Date.now(),
-
-            status:
-              "waiting_for_youtube_oauth",
-
-            video: video
-
-          },
-
-          message:
-            "YouTube upload request accepted."
-
-        });
-
-      } catch (error) {
-
-        return json({
-          success: false,
-          error: error.message
-        }, 400);
-
-      }
-
+        message:
+          "YouTube upload request accepted."
+      });
     }
 
 
@@ -551,41 +411,39 @@ export default {
     ) {
 
       return json({
-
         success: true,
 
         scheduler: {
-
           enabled: true,
-
-          type:
-            "Cloudflare Cron",
-
-          status:
-            "ready",
+          type: "Cloudflare Cron",
+          status: "ready",
 
           pipeline: [
-
             "Research",
-
             "Content",
-
             "Video",
-
             "Voice-over",
-
             "Shorts",
-
             "Analysis",
-
             "YouTube upload"
-
           ]
-
         }
-
       });
+    }
 
+
+    // =========================================
+    // ROOT
+    // =========================================
+
+    if (url.pathname === "/") {
+
+      return json({
+        success: true,
+        service: "AI MINUTE AUTOPILOT",
+        status: "online",
+        version: "5.0.0"
+      });
     }
 
 
@@ -594,26 +452,19 @@ export default {
     // =========================================
 
     return json({
-
       success: false,
-
-      error:
-        "API endpoint not found."
-
+      error: "API endpoint not found.",
+      path: url.pathname,
+      method: request.method
     }, 404);
-
   },
 
 
   // =========================================
-  // CRON AUTOPILOT
+  // CLOUDFLARE CRON
   // =========================================
 
-  async scheduled(
-    controller,
-    env,
-    ctx
-  ) {
+  async scheduled(controller, env, ctx) {
 
     console.log(
       "AI MINUTE AUTOPILOT scheduler executed:",
