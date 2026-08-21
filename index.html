@@ -1,620 +1,851 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>AI Minute Autopilot</title>
+<meta charset="UTF-8">
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #070a12;
-            color: #ffffff;
-        }
+<title>AI Minute Autopilot</title>
 
-        .container {
-            max-width: 1000px;
-            margin: auto;
-            padding: 20px;
-        }
+<style>
 
-        header {
-            text-align: center;
-            padding: 30px 10px;
-        }
+* {
+  box-sizing: border-box;
+}
 
-        header h1 {
-            margin: 0;
-            font-size: 36px;
-        }
+body {
+  margin: 0;
+  background: #070a12;
+  color: white;
+  font-family: Arial, sans-serif;
+}
 
-        header p {
-            color: #9da6ba;
-        }
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+}
 
-        .card {
-            background: #101522;
-            border: 1px solid #242c3d;
-            border-radius: 18px;
-            padding: 22px;
-            margin-bottom: 18px;
-        }
+header {
+  padding: 30px 0;
+}
 
-        .card h2 {
-            margin-top: 0;
-        }
+header h1 {
+  font-size: 38px;
+  margin: 0;
+}
 
-        .autopilot-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-        }
+header p {
+  color: #8e98ad;
+}
 
-        .status {
-            display: inline-block;
-            padding: 8px 16px;
-            border-radius: 20px;
-            background: #343947;
-            margin-right: 10px;
-            font-weight: bold;
-        }
+.card {
+  background: #101522;
+  border: 1px solid #252c3d;
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 18px;
+}
 
-        .status.on {
-            background: #087f5b;
-        }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
 
-        button {
-            border: 0;
-            border-radius: 10px;
-            padding: 12px 18px;
-            background: #ff4fa3;
-            color: white;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+label {
+  display: block;
+  color: #b8c0d0;
+  margin-bottom: 7px;
+}
 
-        button.secondary {
-            background: #252d40;
-        }
+select,
+input {
+  width: 100%;
+  padding: 13px;
+  border-radius: 10px;
+  border: 1px solid #30394c;
+  background: #080c15;
+  color: white;
+  margin-bottom: 15px;
+}
 
-        button.danger {
-            background: #9b3030;
-        }
+button {
+  border: 0;
+  border-radius: 10px;
+  padding: 13px 20px;
+  background: #ff4fa3;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 4px;
+}
 
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+button.secondary {
+  background: #273047;
+}
 
-        label {
-            display: block;
-            margin-bottom: 6px;
-            color: #c9d0df;
-        }
+button.danger {
+  background: #9e3030;
+}
 
-        input,
-        select {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 16px;
-            border-radius: 10px;
-            border: 1px solid #30394e;
-            background: #080c15;
-            color: white;
-            font-size: 15px;
-        }
+.status {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 30px;
+  background: #333b4d;
+}
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-        }
+.status.on {
+  background: #087f5b;
+}
 
-        .feature {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px;
-            background: #0b101c;
-            border-radius: 12px;
-            margin-bottom: 10px;
-        }
+.feature {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  margin: 8px 0;
+  background: #0a0f1b;
+  border-radius: 10px;
+}
 
-        .feature span {
-            color: #aab3c5;
-        }
+.ready {
+  color: #45d19a;
+}
 
-        .log {
-            background: #080c15;
-            border-radius: 12px;
-            padding: 15px;
-            min-height: 80px;
-            color: #aeb6c7;
-            white-space: pre-wrap;
-        }
+.log {
+  background: #080c15;
+  border-radius: 10px;
+  padding: 15px;
+  white-space: pre-wrap;
+  color: #aeb7c8;
+  min-height: 70px;
+}
 
-        .small {
-            font-size: 13px;
-            color: #7f899d;
-        }
+.job {
+  border: 1px solid #2b3449;
+  border-radius: 12px;
+  padding: 15px;
+  margin-top: 12px;
+  background: #0b101c;
+}
 
-        @media (max-width: 700px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
+.job-title {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
 
-            .autopilot-row {
-                flex-direction: column;
-                align-items: stretch;
-            }
+.step {
+  display: inline-block;
+  background: #20283a;
+  padding: 5px 8px;
+  border-radius: 6px;
+  margin: 3px;
+  font-size: 12px;
+}
 
-            header h1 {
-                font-size: 29px;
-            }
-        }
-    </style>
+@media(max-width:700px) {
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  header h1 {
+    font-size: 30px;
+  }
+
+}
+
+</style>
+
 </head>
 
 <body>
 
 <div class="container">
 
-    <header>
-        <h1>AI MINUTE AUTOPILOT</h1>
-        <p>Automated YouTube content management</p>
-    </header>
+<header>
 
+<h1>AI MINUTE AUTOPILOT</h1>
 
-    <!-- AUTOPILOT -->
+<p>
+Automate your YouTube content workflow
+</p>
 
-    <div class="card">
+</header>
 
-        <div class="autopilot-row">
 
-            <div>
-                <h2>Autopilot</h2>
+<!-- AUTOPILOT -->
 
-                <p class="small">
-                    Turn on automatic content production
-                    according to your settings.
-                </p>
-            </div>
+<div class="card">
 
-            <div>
+<h2>Autopilot</h2>
 
-                <span
-                    id="autopilotStatus"
-                    class="status"
-                >
-                    OFF
-                </span>
+<p>
+When enabled, the system will use your selected
+content type, voice and schedule.
+</p>
 
-                <button
-                    id="autopilotButton"
-                    onclick="toggleAutopilot()"
-                >
-                    Turn ON
-                </button>
+<span
+  id="status"
+  class="status"
+>
+OFF
+</span>
 
-            </div>
+<button
+  onclick="toggleAutopilot()"
+  id="toggleButton"
+>
+Turn ON
+</button>
 
-        </div>
+</div>
 
-    </div>
 
+<!-- SETTINGS -->
 
-    <!-- CONTENT SETTINGS -->
+<div class="card">
 
-    <div class="card">
+<h2>Content Settings</h2>
 
-        <h2>Content Settings</h2>
+<div class="grid">
 
-        <div class="grid">
+<div>
 
-            <div>
+<label>Video Type</label>
 
-                <label>Video Type</label>
+<select id="videoType">
 
-                <select id="videoType">
+<option value="long">
+Long YouTube Video
+</option>
 
-                    <option value="long">
-                        YouTube Video
-                    </option>
+<option value="short">
+YouTube Short
+</option>
 
-                    <option value="short">
-                        YouTube Short
-                    </option>
+<option value="both">
+Long Video + Short
+</option>
 
-                    <option value="both">
-                        Video + Short
-                    </option>
+</select>
 
-                </select>
+</div>
 
-            </div>
 
+<div>
 
-            <div>
+<label>Category</label>
 
-                <label>Category</label>
+<select id="category">
 
-                <select id="category">
+<option>AI & Technology</option>
 
-                    <option>AI & Technology</option>
-                    <option>Business</option>
-                    <option>Productivity</option>
-                    <option>Finance</option>
-                    <option>Education</option>
-                    <option>Motivation</option>
-                    <option>Entertainment</option>
+<option>Business</option>
 
-                </select>
+<option>Productivity</option>
 
-            </div>
+<option>Education</option>
 
+<option>Motivation</option>
 
-            <div>
+<option>Entertainment</option>
 
-                <label>Voice</label>
+<option>Finance</option>
 
-                <select id="voice">
+</select>
 
-                    <option value="girl">
-                        Girl
-                    </option>
+</div>
 
-                    <option value="boy">
-                        Boy
-                    </option>
 
-                    <option value="man">
-                        Man
-                    </option>
+<div>
 
-                    <option value="woman">
-                        Woman
-                    </option>
+<label>Voice</label>
 
-                </select>
+<select id="voice">
 
-            </div>
+<option value="girl">
+Girl
+</option>
 
+<option value="boy">
+Boy
+</option>
 
-            <div>
+<option value="man">
+Man
+</option>
 
-                <label>Upload frequency</label>
+<option value="woman">
+Woman
+</option>
 
-                <select id="frequency">
+</select>
 
-                    <option value="daily">
-                        Every day
-                    </option>
+</div>
 
-                    <option value="weekly">
-                        Every week
-                    </option>
 
-                    <option value="manual">
-                        Manual
-                    </option>
+<div>
 
-                </select>
+<label>Frequency</label>
 
-            </div>
+<select id="frequency">
 
+<option value="daily">
+Every Day
+</option>
 
-            <div>
+<option value="weekly">
+Every Week
+</option>
 
-                <label>Upload time</label>
+<option value="manual">
+Manual
+</option>
 
-                <input
-                    id="uploadTime"
-                    type="time"
-                    value="18:00"
-                >
+</select>
 
-            </div>
+</div>
 
 
-            <div>
+<div>
 
-                <label>Target audience</label>
+<label>Upload Time</label>
 
-                <select id="audience">
+<input
+  id="uploadTime"
+  type="time"
+  value="18:00"
+>
 
-                    <option>United States</option>
-                    <option>Global English</option>
-                    <option>India</option>
+</div>
 
-                </select>
 
-            </div>
+<div>
 
-        </div>
+<label>Audience</label>
 
-    </div>
+<select id="audience">
 
+<option>
+United States
+</option>
 
-    <!-- FEATURES -->
+<option>
+Global English
+</option>
 
-    <div class="card">
+<option>
+India
+</option>
 
-        <h2>Autopilot Features</h2>
+</select>
 
-        <div class="feature">
-            <strong>Automatic video creation</strong>
-            <span>Ready</span>
-        </div>
+</div>
 
-        <div class="feature">
-            <strong>Shorts creation</strong>
-            <span>Ready</span>
-        </div>
+</div>
 
-        <div class="feature">
-            <strong>Voice-over</strong>
-            <span>Ready</span>
-        </div>
+<button onclick="saveSettings()">
+Save Autopilot Settings
+</button>
 
-        <div class="feature">
-            <strong>Video analysis</strong>
-            <span>Ready</span>
-        </div>
+</div>
 
-        <div class="feature">
-            <strong>Scheduled upload</strong>
-            <span>Ready</span>
-        </div>
 
-        <div class="feature">
-            <strong>YouTube upload</strong>
-            <span>Ready</span>
-        </div>
+<!-- PIPELINE -->
 
-    </div>
+<div class="card">
 
+<h2>Autopilot Pipeline</h2>
 
-    <!-- SAVE -->
+<div class="feature">
+<span>Research</span>
+<span class="ready">READY</span>
+</div>
 
-    <div class="card">
+<div class="feature">
+<span>Content Creation</span>
+<span class="ready">READY</span>
+</div>
 
-        <h2>Autopilot Configuration</h2>
+<div class="feature">
+<span>Video Generation</span>
+<span class="ready">READY</span>
+</div>
 
-        <button onclick="saveSettings()">
-            Save Settings
-        </button>
+<div class="feature">
+<span>Voice-over</span>
+<span class="ready">READY</span>
+</div>
 
-        <button
-            class="secondary"
-            onclick="loadSettings()"
-        >
-            Load Settings
-        </button>
+<div class="feature">
+<span>Short Generation</span>
+<span class="ready">READY</span>
+</div>
 
-        <div
-            id="message"
-            class="log"
-            style="margin-top:15px;"
-        >
-            Waiting for configuration.
-        </div>
+<div class="feature">
+<span>Video Analysis</span>
+<span class="ready">READY</span>
+</div>
 
-    </div>
+<div class="feature">
+<span>Scheduled Upload</span>
+<span class="ready">READY</span>
+</div>
 
+<div class="feature">
+<span>YouTube Upload</span>
+<span class="ready">READY</span>
+</div>
 
-    <!-- SYSTEM -->
+</div>
 
-    <div class="card">
 
-        <h2>System Status</h2>
+<!-- TEST -->
 
-        <div id="systemStatus" class="log">
-            Checking backend...
-        </div>
+<div class="card">
 
-    </div>
+<h2>Autopilot Control</h2>
+
+<p>
+Create a test job to verify the backend.
+</p>
+
+<button onclick="testAutopilot()">
+Start Test Job
+</button>
+
+<button
+  class="secondary"
+  onclick="createJob()"
+>
+Create Production Job
+</button>
+
+<div
+  id="message"
+  class="log"
+>
+System ready.
+</div>
+
+</div>
+
+
+<!-- JOBS -->
+
+<div class="card">
+
+<h2>Jobs</h2>
+
+<div id="jobs">
+
+No jobs created yet.
+
+</div>
+
+</div>
+
+
+<!-- SYSTEM -->
+
+<div class="card">
+
+<h2>System</h2>
+
+<div
+  id="system"
+  class="log"
+>
+Checking...
+</div>
+
+</div>
 
 </div>
 
 
 <script>
 
-let autopilotEnabled = false;
+let autopilot = false;
+
+let jobs = [];
 
 
-async function checkBackend() {
+async function health() {
 
-    const status =
-        document.getElementById("systemStatus");
+  try {
 
-    try {
+    const response =
+      await fetch("/api/health");
 
-        const response =
-            await fetch("/api/health");
+    const data =
+      await response.json();
 
-        const data =
-            await response.json();
+    document.getElementById(
+      "system"
+    ).textContent =
+      "ONLINE\n" +
+      data.service +
+      "\nVersion: " +
+      data.version;
 
-        if (data.success) {
+  } catch(error) {
 
-            status.textContent =
-                "Backend: ONLINE\n" +
-                "Service: " +
-                data.service;
+    document.getElementById(
+      "system"
+    ).textContent =
+      "OFFLINE\n" +
+      error.message;
 
-        } else {
+  }
 
-            status.textContent =
-                "Backend: ERROR";
-        }
-
-    } catch (error) {
-
-        status.textContent =
-            "Backend: OFFLINE\n" +
-            error.message;
-    }
 }
 
 
 function toggleAutopilot() {
 
-    autopilotEnabled =
-        !autopilotEnabled;
+  autopilot = !autopilot;
 
-    const status =
-        document.getElementById(
-            "autopilotStatus"
-        );
+  const status =
+    document.getElementById("status");
 
-    const button =
-        document.getElementById(
-            "autopilotButton"
-        );
+  const button =
+    document.getElementById("toggleButton");
 
-    if (autopilotEnabled) {
+  if(autopilot) {
 
-        status.textContent = "ON";
+    status.textContent = "ON";
 
-        status.classList.add("on");
+    status.classList.add("on");
 
-        button.textContent =
-            "Turn OFF";
+    button.textContent = "Turn OFF";
 
-    } else {
+  } else {
 
-        status.textContent = "OFF";
+    status.textContent = "OFF";
 
-        status.classList.remove("on");
+    status.classList.remove("on");
 
-        button.textContent =
-            "Turn ON";
-    }
+    button.textContent = "Turn ON";
+
+  }
+
+}
+
+
+function getSettings() {
+
+  return {
+
+    autopilot: autopilot,
+
+    videoType:
+      document.getElementById(
+        "videoType"
+      ).value,
+
+    category:
+      document.getElementById(
+        "category"
+      ).value,
+
+    voice:
+      document.getElementById(
+        "voice"
+      ).value,
+
+    frequency:
+      document.getElementById(
+        "frequency"
+      ).value,
+
+    uploadTime:
+      document.getElementById(
+        "uploadTime"
+      ).value,
+
+    audience:
+      document.getElementById(
+        "audience"
+      ).value
+
+  };
 
 }
 
 
 async function saveSettings() {
 
-    const message =
-        document.getElementById("message");
+  const message =
+    document.getElementById("message");
 
-    const settings = {
+  message.textContent =
+    "Saving settings...";
 
-        autopilot:
-            autopilotEnabled,
+  try {
 
-        videoType:
-            document.getElementById(
-                "videoType"
-            ).value,
+    const response =
+      await fetch(
+        "/api/autopilot",
+        {
+          method: "POST",
 
-        category:
-            document.getElementById(
-                "category"
-            ).value,
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
 
-        voice:
-            document.getElementById(
-                "voice"
-            ).value,
-
-        frequency:
-            document.getElementById(
-                "frequency"
-            ).value,
-
-        uploadTime:
-            document.getElementById(
-                "uploadTime"
-            ).value,
-
-        audience:
-            document.getElementById(
-                "audience"
-            ).value
-
-    };
-
-
-    message.textContent =
-        "Saving configuration...";
-
-
-    try {
-
-        const response =
-            await fetch(
-                "/api/autopilot",
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body:
-                        JSON.stringify(settings)
-                }
-            );
-
-
-        const data =
-            await response.json();
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                data.error ||
-                "Unable to save settings."
-            );
-
-        }
-
-
-        message.textContent =
-            "Configuration saved successfully.\n\n" +
+          body:
             JSON.stringify(
-                data.autopilot,
-                null,
-                2
-            );
+              getSettings()
+            )
+        }
+      );
 
+    const data =
+      await response.json();
 
-    } catch (error) {
+    if(!data.success) {
 
-        message.textContent =
-            "Error: " +
-            error.message;
+      throw new Error(
+        data.error
+      );
 
     }
 
+    message.textContent =
+      "Autopilot settings saved.\n\n" +
+      JSON.stringify(
+        data.config,
+        null,
+        2
+      );
+
+  } catch(error) {
+
+    message.textContent =
+      "ERROR: " +
+      error.message;
+
+  }
+
 }
 
 
-function loadSettings() {
+async function testAutopilot() {
 
-    document.getElementById(
-        "message"
-    ).textContent =
-        "Settings are currently stored for the active session.";
+  const message =
+    document.getElementById("message");
+
+  message.textContent =
+    "Creating test job...";
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/autopilot/test",
+        {
+          method: "POST"
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if(!data.success) {
+
+      throw new Error(
+        data.error
+      );
+
+    }
+
+    jobs.unshift(
+      data.job
+    );
+
+    renderJobs();
+
+    message.textContent =
+      "Test job created successfully.";
+
+  } catch(error) {
+
+    message.textContent =
+      "ERROR: " +
+      error.message;
+
+  }
 
 }
 
 
-checkBackend();
+async function createJob() {
+
+  const message =
+    document.getElementById("message");
+
+  message.textContent =
+    "Creating production job...";
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/jobs",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify(
+              getSettings()
+            )
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if(!data.success) {
+
+      throw new Error(
+        data.error
+      );
+
+    }
+
+    jobs.unshift(
+      data.job
+    );
+
+    renderJobs();
+
+    message.textContent =
+      "Production job created.";
+
+  } catch(error) {
+
+    message.textContent =
+      "ERROR: " +
+      error.message;
+
+  }
+
+}
+
+
+function renderJobs() {
+
+  const container =
+    document.getElementById("jobs");
+
+  if(jobs.length === 0) {
+
+    container.textContent =
+      "No jobs created yet.";
+
+    return;
+
+  }
+
+  container.innerHTML = "";
+
+  jobs.forEach(job => {
+
+    const div =
+      document.createElement("div");
+
+    div.className = "job";
+
+    div.innerHTML = `
+
+      <div class="job-title">
+        ${job.id}
+      </div>
+
+      <div>
+        Status:
+        <strong>
+          ${job.status}
+        </strong>
+      </div>
+
+      <div>
+        Type:
+        ${job.type}
+      </div>
+
+      <div>
+        Category:
+        ${job.category}
+      </div>
+
+      <div>
+        Voice:
+        ${job.voice}
+      </div>
+
+      <div>
+        Upload:
+        ${job.scheduledTime}
+      </div>
+
+      <br>
+
+      <div>
+
+        <span class="step">
+          Research
+        </span>
+
+        <span class="step">
+          Video
+        </span>
+
+        <span class="step">
+          Voice
+        </span>
+
+        <span class="step">
+          Shorts
+        </span>
+
+        <span class="step">
+          Analysis
+        </span>
+
+        <span class="step">
+          YouTube
+        </span>
+
+      </div>
+
+    `;
+
+    container.appendChild(div);
+
+  });
+
+}
+
+
+health();
 
 </script>
 
 </body>
+
 </html>
