@@ -1,11 +1,5 @@
-const GROQ_URL =
-  "https://api.groq.com/openai/v1/chat/completions";
-
-const GROQ_MODEL =
-  "llama-3.3-70b-versatile";
-
 export default {
-  async fetch(request, env) {
+  async fetch(request) {
     const url = new URL(request.url);
 
     if (url.pathname === "/api/health") {
@@ -16,135 +10,35 @@ export default {
       });
     }
 
-    if (
-      url.pathname === "/api/generate-script" &&
-      request.method === "POST"
-    ) {
-      try {
-        const body = await request.json();
-        const topic = String(body.topic || "").trim();
-
-        if (!topic) {
-          return Response.json(
-            {
-              success: false,
-              error: "Topic is required."
-            },
-            { status: 400 }
-          );
-        }
-
-        if (!env.GROQ_API_KEY) {
-          return Response.json(
-            {
-              success: false,
-              error: "GROQ_API_KEY is not configured."
-            },
-            { status: 500 }
-          );
-        }
-
-        const prompt = `
-Create a YouTube video script.
-
-Target audience:
-United States.
-
-Topic:
-${topic}
-
-Requirements:
-- Natural American English
-- Strong first 10 seconds
-- Clear structure
-- Interesting and useful
-- Do not invent statistics
-- Do not invent sources
-- Include a natural conclusion
-- Include a short call to action
-- Return only the spoken narration.
-`;
-
-        const response = await fetch(
-          GROQ_URL,
+    if (url.pathname === "/api/autopilot") {
+      if (request.method !== "POST") {
+        return Response.json(
           {
-            method: "POST",
-
-            headers: {
-              "Authorization":
-                "Bearer " + env.GROQ_API_KEY,
-              "Content-Type":
-                "application/json"
-            },
-
-            body: JSON.stringify({
-              model: GROQ_MODEL,
-
-              messages: [
-                {
-                  role: "system",
-                  content:
-                    "You are an expert YouTube scriptwriter."
-                },
-                {
-                  role: "user",
-                  content: prompt
-                }
-              ],
-
-              temperature: 0.7,
-              max_tokens: 4000
-            })
-          }
+            success: false,
+            error: "POST required"
+          },
+          { status: 405 }
         );
+      }
 
-        const data = await response.json();
-
-        if (!response.ok) {
-          return Response.json(
-            {
-              success: false,
-              error:
-                data?.error?.message ||
-                "Groq API request failed."
-            },
-            { status: 500 }
-          );
-        }
-
-        const script =
-          data?.choices?.[0]?.message?.content || "";
+      try {
+        const data = await request.json();
 
         return Response.json({
           success: true,
-          topic: topic,
-          script: script
+          message: "Autopilot configuration received.",
+          autopilot: data
         });
 
       } catch (error) {
         return Response.json(
           {
             success: false,
-            error: error.message
+            error: "Invalid request."
           },
-          { status: 500 }
+          { status: 400 }
         );
       }
-    }
-
-    if (url.pathname === "/api/config") {
-      return Response.json({
-        success: true,
-        features: {
-          autopilot: true,
-          videoCreation: true,
-          shorts: true,
-          voiceOver: true,
-          videoAnalysis: true,
-          scheduling: true,
-          youtubeUpload: true
-        }
-      });
     }
 
     return Response.json(
