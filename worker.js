@@ -42,9 +42,9 @@ export default {
 
     const url = new URL(request.url);
 
-    // -----------------------------
+    // =========================================
     // HEALTH
-    // -----------------------------
+    // =========================================
 
     if (url.pathname === "/api/health") {
 
@@ -52,14 +52,15 @@ export default {
         success: true,
         service: "AI MINUTE AUTOPILOT",
         status: "online",
-        version: "3.0.0"
+        version: "4.0.0"
       });
 
     }
 
-    // -----------------------------
-    // AUTOPILOT SETTINGS
-    // -----------------------------
+
+    // =========================================
+    // AUTOPILOT CONFIGURATION
+    // =========================================
 
     if (
       url.pathname === "/api/autopilot" &&
@@ -78,24 +79,45 @@ export default {
               ? "Autopilot activated."
               : "Autopilot disabled.",
 
-          settings
+          settings: {
+            autopilot:
+              Boolean(settings.autopilot),
 
+            videoType:
+              settings.videoType || "both",
+
+            category:
+              settings.category || "AI & Technology",
+
+            voice:
+              settings.voice || "woman",
+
+            frequency:
+              settings.frequency || "daily",
+
+            uploadTime:
+              settings.uploadTime || "18:00",
+
+            audience:
+              settings.audience || "United States"
+          }
         });
 
-      } catch {
+      } catch (error) {
 
         return json({
           success: false,
-          error: "Invalid settings."
+          error: "Invalid autopilot settings."
         }, 400);
 
       }
 
     }
 
-    // -----------------------------
+
+    // =========================================
     // CREATE PRODUCTION JOB
-    // -----------------------------
+    // =========================================
 
     if (
       url.pathname === "/api/jobs" &&
@@ -112,8 +134,10 @@ export default {
 
         return json({
           success: true,
+
           message:
             "Autopilot job started.",
+
           job
         });
 
@@ -128,9 +152,10 @@ export default {
 
     }
 
-    // -----------------------------
-    // TEST JOB
-    // -----------------------------
+
+    // =========================================
+    // TEST AUTOPILOT
+    // =========================================
 
     if (
       url.pathname === "/api/autopilot/test" &&
@@ -149,56 +174,446 @@ export default {
 
       return json({
         success: true,
+
         message:
           "Autopilot test started.",
+
         job
       });
 
     }
 
-    // -----------------------------
-    // SCHEDULE STATUS
-    // -----------------------------
+
+    // =========================================
+    // VOICEOVER REQUEST
+    // =========================================
 
     if (
-      url.pathname === "/api/scheduler"
+      url.pathname === "/api/voiceover" &&
+      request.method === "POST"
+    ) {
+
+      try {
+
+        const body =
+          await request.json();
+
+        const text =
+          String(
+            body.text || ""
+          ).trim();
+
+        const voice =
+          String(
+            body.voice || "woman"
+          ).trim().toLowerCase();
+
+
+        if (!text) {
+
+          return json({
+            success: false,
+            error: "Text is required."
+          }, 400);
+
+        }
+
+
+        const allowedVoices = [
+          "girl",
+          "boy",
+          "man",
+          "woman"
+        ];
+
+
+        if (
+          !allowedVoices.includes(voice)
+        ) {
+
+          return json({
+            success: false,
+
+            error:
+              "Invalid voice. Choose girl, boy, man or woman."
+          }, 400);
+
+        }
+
+
+        return json({
+
+          success: true,
+
+          status: "queued",
+
+          voiceJob: {
+
+            id:
+              "voice_" +
+              Date.now(),
+
+            voice: voice,
+
+            textLength:
+              text.length,
+
+            status:
+              "waiting_for_voice_provider"
+
+          },
+
+          message:
+            "Voice-over request accepted."
+
+        });
+
+      } catch (error) {
+
+        return json({
+          success: false,
+          error: error.message
+        }, 400);
+
+      }
+
+    }
+
+
+    // =========================================
+    // VIDEO CREATION REQUEST
+    // =========================================
+
+    if (
+      url.pathname === "/api/video/create" &&
+      request.method === "POST"
+    ) {
+
+      try {
+
+        const body =
+          await request.json();
+
+        const topic =
+          String(
+            body.topic || ""
+          ).trim();
+
+        const videoType =
+          String(
+            body.videoType || "long"
+          );
+
+        if (!topic) {
+
+          return json({
+            success: false,
+            error: "Topic is required."
+          }, 400);
+
+        }
+
+
+        return json({
+
+          success: true,
+
+          status: "queued",
+
+          videoJob: {
+
+            id:
+              "video_" +
+              Date.now(),
+
+            topic: topic,
+
+            type: videoType,
+
+            status:
+              "waiting_for_video_provider"
+
+          },
+
+          message:
+            "Video creation request accepted."
+
+        });
+
+      } catch (error) {
+
+        return json({
+          success: false,
+          error: error.message
+        }, 400);
+
+      }
+
+    }
+
+
+    // =========================================
+    // SHORT CREATION REQUEST
+    // =========================================
+
+    if (
+      url.pathname === "/api/short/create" &&
+      request.method === "POST"
+    ) {
+
+      try {
+
+        const body =
+          await request.json();
+
+        const source =
+          String(
+            body.source || ""
+          ).trim();
+
+
+        if (!source) {
+
+          return json({
+            success: false,
+            error: "Source video is required."
+          }, 400);
+
+        }
+
+
+        return json({
+
+          success: true,
+
+          status: "queued",
+
+          shortJob: {
+
+            id:
+              "short_" +
+              Date.now(),
+
+            source: source,
+
+            status:
+              "waiting_for_video_provider"
+
+          },
+
+          message:
+            "Short creation request accepted."
+
+        });
+
+      } catch (error) {
+
+        return json({
+          success: false,
+          error: error.message
+        }, 400);
+
+      }
+
+    }
+
+
+    // =========================================
+    // VIDEO ANALYSIS
+    // =========================================
+
+    if (
+      url.pathname === "/api/video/analyze" &&
+      request.method === "POST"
+    ) {
+
+      try {
+
+        const body =
+          await request.json();
+
+        const video =
+          String(
+            body.video || ""
+          ).trim();
+
+
+        if (!video) {
+
+          return json({
+            success: false,
+            error: "Video is required."
+          }, 400);
+
+        }
+
+
+        return json({
+
+          success: true,
+
+          analysis: {
+
+            status: "queued",
+
+            video: video,
+
+            message:
+              "Video analysis request accepted."
+
+          }
+
+        });
+
+      } catch (error) {
+
+        return json({
+          success: false,
+          error: error.message
+        }, 400);
+
+      }
+
+    }
+
+
+    // =========================================
+    // YOUTUBE UPLOAD REQUEST
+    // =========================================
+
+    if (
+      url.pathname === "/api/youtube/upload" &&
+      request.method === "POST"
+    ) {
+
+      try {
+
+        const body =
+          await request.json();
+
+        const video =
+          String(
+            body.video || ""
+          ).trim();
+
+
+        if (!video) {
+
+          return json({
+            success: false,
+            error: "Video is required."
+          }, 400);
+
+        }
+
+
+        return json({
+
+          success: true,
+
+          upload: {
+
+            id:
+              "upload_" +
+              Date.now(),
+
+            status:
+              "waiting_for_youtube_oauth",
+
+            video: video
+
+          },
+
+          message:
+            "YouTube upload request accepted."
+
+        });
+
+      } catch (error) {
+
+        return json({
+          success: false,
+          error: error.message
+        }, 400);
+
+      }
+
+    }
+
+
+    // =========================================
+    // SCHEDULER
+    // =========================================
+
+    if (
+      url.pathname === "/api/scheduler" &&
+      request.method === "GET"
     ) {
 
       return json({
+
         success: true,
 
         scheduler: {
+
           enabled: true,
-          type: "Cloudflare Cron",
-          status: "ready",
+
+          type:
+            "Cloudflare Cron",
+
+          status:
+            "ready",
 
           pipeline: [
+
             "Research",
+
             "Content",
+
             "Video",
+
             "Voice-over",
+
             "Shorts",
+
             "Analysis",
+
             "YouTube upload"
+
           ]
+
         }
+
       });
 
     }
 
+
+    // =========================================
+    // NOT FOUND
+    // =========================================
+
     return json({
+
       success: false,
-      error: "API endpoint not found."
+
+      error:
+        "API endpoint not found."
+
     }, 404);
 
   },
 
 
-  // --------------------------------
-  // AUTOMATIC SCHEDULED EXECUTION
-  // --------------------------------
+  // =========================================
+  // CRON AUTOPILOT
+  // =========================================
 
-  async scheduled(controller, env, ctx) {
+  async scheduled(
+    controller,
+    env,
+    ctx
+  ) {
 
     console.log(
       "AI MINUTE AUTOPILOT scheduler executed:",
@@ -206,10 +621,6 @@ export default {
         controller.scheduledTime
       ).toISOString()
     );
-
-    // This is the scheduler.
-    // Actual video generation will be
-    // connected in the next stage.
 
   }
 
