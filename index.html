@@ -1,148 +1,345 @@
-const GROQ_URL =
-  "https://api.groq.com/openai/v1/chat/completions";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-const GROQ_MODEL =
-  "llama-3.3-70b-versatile";
+    <title>AI Minute Autopilot</title>
 
-export default {
-  async fetch(request, env) {
-    const url = new URL(request.url);
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-    // Health check
-    if (url.pathname === "/api/health") {
-      return Response.json({
-        success: true,
-        service: "AI MINUTE AUTOPILOT",
-        status: "online"
-      });
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #080b14;
+            color: white;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            padding: 25px;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 10px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 38px;
+        }
+
+        header p {
+            color: #aeb5c7;
+        }
+
+        .card {
+            background: #111625;
+            border: 1px solid #252c40;
+            border-radius: 18px;
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            margin-top: 0;
+        }
+
+        .autopilot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status {
+            padding: 8px 15px;
+            border-radius: 20px;
+            background: #333;
+        }
+
+        .status.on {
+            background: #087f5b;
+        }
+
+        button {
+            border: 0;
+            border-radius: 12px;
+            padding: 13px 20px;
+            background: #ff4fa3;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: .9;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 13px;
+            margin-top: 8px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: 1px solid #30384f;
+            background: #090d18;
+            color: white;
+            font-size: 15px;
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        label {
+            color: #cbd1df;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .result {
+            white-space: pre-wrap;
+            background: #080c16;
+            border-radius: 12px;
+            padding: 18px;
+            line-height: 1.6;
+            min-height: 100px;
+        }
+
+        .message {
+            margin-top: 15px;
+            color: #aeb5c7;
+        }
+
+        @media (max-width: 700px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <header>
+        <h1>AI MINUTE AUTOPILOT</h1>
+        <p>AI-powered YouTube content automation</p>
+    </header>
+
+    <div class="card autopilot">
+        <div>
+            <h2>Autopilot</h2>
+            <p>Automatically prepare content for your channel.</p>
+        </div>
+
+        <div>
+            <span id="autopilotStatus" class="status">OFF</span>
+            <button onclick="toggleAutopilot()">
+                Turn ON
+            </button>
+        </div>
+    </div>
+
+    <div class="card">
+
+        <h2>Create Video</h2>
+
+        <label>Topic</label>
+
+        <input
+            id="topic"
+            type="text"
+            placeholder="Example: 5 AI tools for small businesses"
+        >
+
+        <div class="grid">
+
+            <div>
+                <label>Video Type</label>
+
+                <select id="videoType">
+                    <option>YouTube Video</option>
+                    <option>YouTube Short</option>
+                    <option>Both</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Voice</label>
+
+                <select id="voice">
+                    <option>Girl</option>
+                    <option>Boy</option>
+                    <option>Man</option>
+                    <option>Woman</option>
+                </select>
+            </div>
+
+        </div>
+
+        <div class="grid">
+
+            <div>
+                <label>Video Length</label>
+
+                <select id="length">
+                    <option>Short</option>
+                    <option>5 minutes</option>
+                    <option>8 minutes</option>
+                    <option>10 minutes</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Upload Schedule</label>
+
+                <input
+                    id="uploadTime"
+                    type="time"
+                >
+            </div>
+
+        </div>
+
+        <button onclick="generateScript()">
+            Generate AI Script
+        </button>
+
+        <div id="message" class="message"></div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>AI Generated Script</h2>
+
+        <div id="result" class="result">
+            Your generated script will appear here.
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+let autopilot = false;
+
+function toggleAutopilot() {
+
+    autopilot = !autopilot;
+
+    const status =
+        document.getElementById("autopilotStatus");
+
+    const button =
+        document.querySelector(".autopilot button");
+
+    if (autopilot) {
+
+        status.textContent = "ON";
+        status.classList.add("on");
+        button.textContent = "Turn OFF";
+
+    } else {
+
+        status.textContent = "OFF";
+        status.classList.remove("on");
+        button.textContent = "Turn ON";
+    }
+}
+
+
+async function generateScript() {
+
+    const topic =
+        document.getElementById("topic").value.trim();
+
+    const result =
+        document.getElementById("result");
+
+    const message =
+        document.getElementById("message");
+
+    if (!topic) {
+
+        message.textContent =
+            "Please enter a topic.";
+
+        return;
     }
 
-    // AI script generation
-    if (
-      url.pathname === "/api/generate-script" &&
-      request.method === "POST"
-    ) {
-      try {
-        const body = await request.json();
+    message.textContent =
+        "AI is creating your script...";
 
-        const topic =
-          String(body.topic || "").trim();
+    result.textContent =
+        "Generating...";
 
-        if (!topic) {
-          return Response.json(
-            {
-              success: false,
-              error: "Topic is required."
-            },
-            { status: 400 }
-          );
-        }
-
-        if (!env.GROQ_API_KEY) {
-          return Response.json(
-            {
-              success: false,
-              error: "GROQ_API_KEY is not configured."
-            },
-            { status: 500 }
-          );
-        }
-
-        const prompt = `
-Create a YouTube video script.
-
-Target audience:
-United States.
-
-Topic:
-${topic}
-
-Requirements:
-- Natural American English
-- Strong first 10 seconds
-- Clear structure
-- Interesting and useful
-- Do not invent statistics
-- Do not invent sources
-- Include a natural conclusion
-- Include a short call to action
-- Return only the spoken narration
-`;
+    try {
 
         const response = await fetch(
-          GROQ_URL,
-          {
-            method: "POST",
+            "/api/generate-script",
+            {
+                method: "POST",
 
-            headers: {
-              "Authorization":
-                "Bearer " + env.GROQ_API_KEY,
-
-              "Content-Type":
-                "application/json"
-            },
-
-            body: JSON.stringify({
-              model: GROQ_MODEL,
-
-              messages: [
-                {
-                  role: "system",
-                  content:
-                    "You are an expert YouTube scriptwriter."
+                headers: {
+                    "Content-Type":
+                        "application/json"
                 },
-                {
-                  role: "user",
-                  content: prompt
-                }
-              ],
 
-              temperature: 0.7,
-              max_tokens: 4000
-            })
-          }
+                body: JSON.stringify({
+                    topic: topic
+                })
+            }
         );
 
         const data =
-          await response.json();
+            await response.json();
 
-        if (!response.ok) {
-          return Response.json(
-            {
-              success: false,
-              error:
-                data?.error?.message ||
-                "Groq API request failed."
-            },
-            { status: 500 }
-          );
+        if (!response.ok || !data.success) {
+
+            throw new Error(
+                data.error ||
+                "AI request failed."
+            );
         }
 
-        const script =
-          data?.choices?.[0]?.message?.content ||
-          "";
+        result.textContent =
+            data.script;
 
-        return Response.json({
-          success: true,
-          topic: topic,
-          script: script
-        });
+        message.textContent =
+            "Script created successfully.";
 
-      } catch (error) {
+    } catch (error) {
 
-        return Response.json(
-          {
-            success: false,
-            error: error.message
-          },
-          { status: 500 }
-        );
-      }
+        result.textContent =
+            "Error: " + error.message;
+
+        message.textContent =
+            "Could not generate the script.";
     }
+}
 
-    return Response.json({
-      success: false,
-      error: "API endpoint not found."
-    }, { status: 404 });
-  }
-};
+</script>
+
+</body>
+</html>
