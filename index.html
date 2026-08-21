@@ -14,14 +14,14 @@
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: #080b14;
-            color: white;
+            background: #070a12;
+            color: #ffffff;
         }
 
         .container {
             max-width: 1000px;
             margin: auto;
-            padding: 25px;
+            padding: 20px;
         }
 
         header {
@@ -31,35 +31,39 @@
 
         header h1 {
             margin: 0;
-            font-size: 38px;
+            font-size: 36px;
         }
 
         header p {
-            color: #aeb5c7;
+            color: #9da6ba;
         }
 
         .card {
-            background: #111625;
-            border: 1px solid #252c40;
+            background: #101522;
+            border: 1px solid #242c3d;
             border-radius: 18px;
             padding: 22px;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .card h2 {
             margin-top: 0;
         }
 
-        .autopilot {
+        .autopilot-row {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            gap: 20px;
         }
 
         .status {
-            padding: 8px 15px;
+            display: inline-block;
+            padding: 8px 16px;
             border-radius: 20px;
-            background: #333;
+            background: #343947;
+            margin-right: 10px;
+            font-weight: bold;
         }
 
         .status.on {
@@ -68,60 +72,78 @@
 
         button {
             border: 0;
-            border-radius: 12px;
-            padding: 13px 20px;
+            border-radius: 10px;
+            padding: 12px 18px;
             background: #ff4fa3;
             color: white;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
         }
 
-        button:hover {
-            opacity: .9;
+        button.secondary {
+            background: #252d40;
         }
 
-        input,
-        select,
-        textarea {
-            width: 100%;
-            padding: 13px;
-            margin-top: 8px;
-            margin-bottom: 15px;
-            border-radius: 10px;
-            border: 1px solid #30384f;
-            background: #090d18;
-            color: white;
-            font-size: 15px;
+        button.danger {
+            background: #9b3030;
         }
 
-        textarea {
-            min-height: 150px;
-            resize: vertical;
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         label {
-            color: #cbd1df;
+            display: block;
+            margin-bottom: 6px;
+            color: #c9d0df;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 16px;
+            border-radius: 10px;
+            border: 1px solid #30394e;
+            background: #080c15;
+            color: white;
+            font-size: 15px;
         }
 
         .grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+            gap: 16px;
         }
 
-        .result {
-            white-space: pre-wrap;
-            background: #080c16;
+        .feature {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px;
+            background: #0b101c;
             border-radius: 12px;
-            padding: 18px;
-            line-height: 1.6;
-            min-height: 100px;
+            margin-bottom: 10px;
         }
 
-        .message {
-            margin-top: 15px;
-            color: #aeb5c7;
+        .feature span {
+            color: #aab3c5;
+        }
+
+        .log {
+            background: #080c15;
+            border-radius: 12px;
+            padding: 15px;
+            min-height: 80px;
+            color: #aeb6c7;
+            white-space: pre-wrap;
+        }
+
+        .small {
+            font-size: 13px;
+            color: #7f899d;
         }
 
         @media (max-width: 700px) {
@@ -129,8 +151,13 @@
                 grid-template-columns: 1fr;
             }
 
+            .autopilot-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
             header h1 {
-                font-size: 30px;
+                font-size: 29px;
             }
         }
     </style>
@@ -142,202 +169,450 @@
 
     <header>
         <h1>AI MINUTE AUTOPILOT</h1>
-        <p>AI-powered YouTube content automation</p>
+        <p>Automated YouTube content management</p>
     </header>
 
-    <div class="card autopilot">
-        <div>
-            <h2>Autopilot</h2>
-            <p>Automatically prepare content for your channel.</p>
-        </div>
 
-        <div>
-            <span id="autopilotStatus" class="status">OFF</span>
-            <button onclick="toggleAutopilot()">
-                Turn ON
-            </button>
-        </div>
-    </div>
+    <!-- AUTOPILOT -->
 
     <div class="card">
 
-        <h2>Create Video</h2>
-
-        <label>Topic</label>
-
-        <input
-            id="topic"
-            type="text"
-            placeholder="Example: 5 AI tools for small businesses"
-        >
-
-        <div class="grid">
+        <div class="autopilot-row">
 
             <div>
-                <label>Video Type</label>
+                <h2>Autopilot</h2>
 
-                <select id="videoType">
-                    <option>YouTube Video</option>
-                    <option>YouTube Short</option>
-                    <option>Both</option>
-                </select>
+                <p class="small">
+                    Turn on automatic content production
+                    according to your settings.
+                </p>
             </div>
 
             <div>
-                <label>Voice</label>
 
-                <select id="voice">
-                    <option>Girl</option>
-                    <option>Boy</option>
-                    <option>Man</option>
-                    <option>Woman</option>
-                </select>
+                <span
+                    id="autopilotStatus"
+                    class="status"
+                >
+                    OFF
+                </span>
+
+                <button
+                    id="autopilotButton"
+                    onclick="toggleAutopilot()"
+                >
+                    Turn ON
+                </button>
+
             </div>
 
         </div>
 
+    </div>
+
+
+    <!-- CONTENT SETTINGS -->
+
+    <div class="card">
+
+        <h2>Content Settings</h2>
+
         <div class="grid">
 
             <div>
-                <label>Video Length</label>
 
-                <select id="length">
-                    <option>Short</option>
-                    <option>5 minutes</option>
-                    <option>8 minutes</option>
-                    <option>10 minutes</option>
+                <label>Video Type</label>
+
+                <select id="videoType">
+
+                    <option value="long">
+                        YouTube Video
+                    </option>
+
+                    <option value="short">
+                        YouTube Short
+                    </option>
+
+                    <option value="both">
+                        Video + Short
+                    </option>
+
                 </select>
+
             </div>
 
+
             <div>
-                <label>Upload Schedule</label>
+
+                <label>Category</label>
+
+                <select id="category">
+
+                    <option>AI & Technology</option>
+                    <option>Business</option>
+                    <option>Productivity</option>
+                    <option>Finance</option>
+                    <option>Education</option>
+                    <option>Motivation</option>
+                    <option>Entertainment</option>
+
+                </select>
+
+            </div>
+
+
+            <div>
+
+                <label>Voice</label>
+
+                <select id="voice">
+
+                    <option value="girl">
+                        Girl
+                    </option>
+
+                    <option value="boy">
+                        Boy
+                    </option>
+
+                    <option value="man">
+                        Man
+                    </option>
+
+                    <option value="woman">
+                        Woman
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div>
+
+                <label>Upload frequency</label>
+
+                <select id="frequency">
+
+                    <option value="daily">
+                        Every day
+                    </option>
+
+                    <option value="weekly">
+                        Every week
+                    </option>
+
+                    <option value="manual">
+                        Manual
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div>
+
+                <label>Upload time</label>
 
                 <input
                     id="uploadTime"
                     type="time"
+                    value="18:00"
                 >
+
+            </div>
+
+
+            <div>
+
+                <label>Target audience</label>
+
+                <select id="audience">
+
+                    <option>United States</option>
+                    <option>Global English</option>
+                    <option>India</option>
+
+                </select>
+
             </div>
 
         </div>
 
-        <button onclick="generateScript()">
-            Generate AI Script
-        </button>
-
-        <div id="message" class="message"></div>
-
     </div>
+
+
+    <!-- FEATURES -->
 
     <div class="card">
 
-        <h2>AI Generated Script</h2>
+        <h2>Autopilot Features</h2>
 
-        <div id="result" class="result">
-            Your generated script will appear here.
+        <div class="feature">
+            <strong>Automatic video creation</strong>
+            <span>Ready</span>
+        </div>
+
+        <div class="feature">
+            <strong>Shorts creation</strong>
+            <span>Ready</span>
+        </div>
+
+        <div class="feature">
+            <strong>Voice-over</strong>
+            <span>Ready</span>
+        </div>
+
+        <div class="feature">
+            <strong>Video analysis</strong>
+            <span>Ready</span>
+        </div>
+
+        <div class="feature">
+            <strong>Scheduled upload</strong>
+            <span>Ready</span>
+        </div>
+
+        <div class="feature">
+            <strong>YouTube upload</strong>
+            <span>Ready</span>
+        </div>
+
+    </div>
+
+
+    <!-- SAVE -->
+
+    <div class="card">
+
+        <h2>Autopilot Configuration</h2>
+
+        <button onclick="saveSettings()">
+            Save Settings
+        </button>
+
+        <button
+            class="secondary"
+            onclick="loadSettings()"
+        >
+            Load Settings
+        </button>
+
+        <div
+            id="message"
+            class="log"
+            style="margin-top:15px;"
+        >
+            Waiting for configuration.
+        </div>
+
+    </div>
+
+
+    <!-- SYSTEM -->
+
+    <div class="card">
+
+        <h2>System Status</h2>
+
+        <div id="systemStatus" class="log">
+            Checking backend...
         </div>
 
     </div>
 
 </div>
 
+
 <script>
 
-let autopilot = false;
+let autopilotEnabled = false;
 
-function toggleAutopilot() {
 
-    autopilot = !autopilot;
+async function checkBackend() {
 
     const status =
-        document.getElementById("autopilotStatus");
-
-    const button =
-        document.querySelector(".autopilot button");
-
-    if (autopilot) {
-
-        status.textContent = "ON";
-        status.classList.add("on");
-        button.textContent = "Turn OFF";
-
-    } else {
-
-        status.textContent = "OFF";
-        status.classList.remove("on");
-        button.textContent = "Turn ON";
-    }
-}
-
-
-async function generateScript() {
-
-    const topic =
-        document.getElementById("topic").value.trim();
-
-    const result =
-        document.getElementById("result");
-
-    const message =
-        document.getElementById("message");
-
-    if (!topic) {
-
-        message.textContent =
-            "Please enter a topic.";
-
-        return;
-    }
-
-    message.textContent =
-        "AI is creating your script...";
-
-    result.textContent =
-        "Generating...";
+        document.getElementById("systemStatus");
 
     try {
 
-        const response = await fetch(
-            "/api/generate-script",
-            {
-                method: "POST",
-
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
-
-                body: JSON.stringify({
-                    topic: topic
-                })
-            }
-        );
+        const response =
+            await fetch("/api/health");
 
         const data =
             await response.json();
 
-        if (!response.ok || !data.success) {
+        if (data.success) {
 
-            throw new Error(
-                data.error ||
-                "AI request failed."
-            );
+            status.textContent =
+                "Backend: ONLINE\n" +
+                "Service: " +
+                data.service;
+
+        } else {
+
+            status.textContent =
+                "Backend: ERROR";
         }
-
-        result.textContent =
-            data.script;
-
-        message.textContent =
-            "Script created successfully.";
 
     } catch (error) {
 
-        result.textContent =
-            "Error: " + error.message;
-
-        message.textContent =
-            "Could not generate the script.";
+        status.textContent =
+            "Backend: OFFLINE\n" +
+            error.message;
     }
 }
+
+
+function toggleAutopilot() {
+
+    autopilotEnabled =
+        !autopilotEnabled;
+
+    const status =
+        document.getElementById(
+            "autopilotStatus"
+        );
+
+    const button =
+        document.getElementById(
+            "autopilotButton"
+        );
+
+    if (autopilotEnabled) {
+
+        status.textContent = "ON";
+
+        status.classList.add("on");
+
+        button.textContent =
+            "Turn OFF";
+
+    } else {
+
+        status.textContent = "OFF";
+
+        status.classList.remove("on");
+
+        button.textContent =
+            "Turn ON";
+    }
+
+}
+
+
+async function saveSettings() {
+
+    const message =
+        document.getElementById("message");
+
+    const settings = {
+
+        autopilot:
+            autopilotEnabled,
+
+        videoType:
+            document.getElementById(
+                "videoType"
+            ).value,
+
+        category:
+            document.getElementById(
+                "category"
+            ).value,
+
+        voice:
+            document.getElementById(
+                "voice"
+            ).value,
+
+        frequency:
+            document.getElementById(
+                "frequency"
+            ).value,
+
+        uploadTime:
+            document.getElementById(
+                "uploadTime"
+            ).value,
+
+        audience:
+            document.getElementById(
+                "audience"
+            ).value
+
+    };
+
+
+    message.textContent =
+        "Saving configuration...";
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/autopilot",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(settings)
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "Unable to save settings."
+            );
+
+        }
+
+
+        message.textContent =
+            "Configuration saved successfully.\n\n" +
+            JSON.stringify(
+                data.autopilot,
+                null,
+                2
+            );
+
+
+    } catch (error) {
+
+        message.textContent =
+            "Error: " +
+            error.message;
+
+    }
+
+}
+
+
+function loadSettings() {
+
+    document.getElementById(
+        "message"
+    ).textContent =
+        "Settings are currently stored for the active session.";
+
+}
+
+
+checkBackend();
 
 </script>
 
